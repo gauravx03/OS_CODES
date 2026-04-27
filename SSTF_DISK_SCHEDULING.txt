@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int n, req[50], visit[50]={0};
+    int i, head, total=0, count=0, pos, min, diff;
+
+    printf("Enter number of requests: ");
+    scanf("%d",&n);
+
+    printf("Enter requests: ");
+    for(i=0;i<n;i++)
+        scanf("%d",&req[i]);
+
+    printf("Enter head position: ");
+    scanf("%d",&head);
+
+    printf("\nGantt Chart:\n%d", head);
+
+    while(count < n)
+    {
+        min = 9999;
+        pos = -1;
+
+        for(i=0;i<n;i++)
+        {
+            if(!visit[i])
+            {
+                diff = abs(head - req[i]);
+                if(diff < min)
+                {
+                    min = diff;
+                    pos = i;
+                }
+            }
+        }
+
+        visit[pos] = 1;
+        total += min;
+        head = req[pos];
+        count++;
+
+        printf(" -> %d", head);
+    }
+
+    printf("\n\nTotal Seek Time   = %d", total);
+    printf("\nTotal Seek Length = %d", total);
+
+    return 0;
+}

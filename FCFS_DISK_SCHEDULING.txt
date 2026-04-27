@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int n,i,head,total=0,req[20];
+
+    printf("Enter number of requests: ");
+    scanf("%d",&n);
+
+    printf("Enter requests: ");
+    for(i=0;i<n;i++)
+        scanf("%d",&req[i]);
+
+    printf("Enter head position: ");
+    scanf("%d",&head);
+
+    printf("\nGantt Chart:\n%d",head);
+
+    for(i=0;i<n;i++)
+    {
+        total += abs(head-req[i]);
+        head = req[i];
+        printf(" -> %d",head);
+    }
+
+    printf("\n\nTotal Seek Time   = %d",total);
+    printf("\nTotal Seek Length = %d",total);
+
+    return 0;
+}

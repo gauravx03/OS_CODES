@@ -1,0 +1,61 @@
+#include<stdio.h>
+#include<stdlib.h>
+int main(){
+    int n,i,j,head,total=0,dir;
+    int req[50],temp;
+    printf("Enter number of requests : ");
+    scanf("%d",&n);
+    if(n<=0){printf("No requests\n");return 0;}
+    printf("Enter requests sequence : ");
+    for(i=0;i<n;i++){scanf("%d",&req[i]);}
+    printf("Enter current head : ");
+    scanf("%d",&head);
+    printf("Enter direction 1=right 0=left : ");
+    scanf("%d",&dir);
+    for(i=0;i<n-1;i++){
+        for(j=0;j<n-i-1;j++){
+            if(req[j]>req[j+1]){
+                temp=req[j];req[j]=req[j+1];req[j+1]=temp;
+            }
+        }
+    }
+    int start=head;
+    printf("Current\tHead Movement\n");
+    printf("%d\t%d\n",head,0);
+    if(dir==1){
+        for(i=0;i<n;i++){
+            if(req[i]>=start){
+                int diff=abs(head-req[i]);
+                printf("%d\t%d\n",req[i],diff);
+                total+=diff;
+                head=req[i];
+            }
+        }
+        for(i=n-1;i>=0;i--){
+            if(req[i]<start){
+                int diff=abs(head-req[i]);
+                printf("%d\t%d\n",req[i],diff);
+                total+=diff;
+                head=req[i];
+            }
+        }
+    }else{
+        for(i=n-1;i>=0;i--){
+            if(req[i]<=start){
+                int diff=abs(head-req[i]);
+                printf("%d\t%d\n",req[i],diff);
+                total+=diff;
+                head=req[i];
+            }
+        }
+        for(i=0;i<n;i++){
+            if(req[i]>start){
+                int diff=abs(head-req[i]);
+                printf("%d\t%d\n",req[i],diff);
+                total+=diff;
+                head=req[i];
+            }
+        }
+    }
+    printf("\nTotal Seek Length : %d\n",total);
+}

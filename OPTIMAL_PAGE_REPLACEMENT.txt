@@ -1,0 +1,92 @@
+#include <stdio.h>
+
+int main()
+{
+    int n,f,i,j,k,pages[50],frame[10];
+    int hit=0,fault=0,pos;
+
+    printf("Enter number of pages: ");
+    scanf("%d",&n);
+
+    printf("Enter number of frames: ");
+    scanf("%d",&f);
+
+    printf("Enter page sequence: ");
+    for(i=0;i<n;i++)
+        scanf("%d",&pages[i]);
+
+    for(i=0;i<f;i++)
+        frame[i]=-1;
+
+    printf("\nPage\t");
+    for(i=0;i<f;i++)
+        printf("F%d\t",i+1);
+    printf("Status\n");
+
+    for(i=0;i<n;i++)
+    {
+        int found=0;
+
+        for(j=0;j<f;j++)
+            if(frame[j]==pages[i])
+                found=1;
+
+        if(found)
+        {
+            hit++;
+            printf("%d\t",pages[i]);
+            for(j=0;j<f;j++)
+                frame[j]==-1 ? printf("-\t") : printf("%d\t",frame[j]);
+            printf("Hit\n");
+        }
+        else
+        {
+            pos=-1;
+
+            for(j=0;j<f;j++)
+                if(frame[j]==-1)
+                {
+                    pos=j;
+                    break;
+                }
+
+            if(pos==-1)
+            {
+                int far=-1,next;
+
+                for(j=0;j<f;j++)
+                {
+                    next=999;
+
+                    for(k=i+1;k<n;k++)
+                        if(frame[j]==pages[k])
+                        {
+                            next=k;
+                            break;
+                        }
+
+                    if(next>far)
+                    {
+                        far=next;
+                        pos=j;
+                    }
+                }
+            }
+
+            frame[pos]=pages[i];
+            fault++;
+
+            printf("%d\t",pages[i]);
+            for(j=0;j<f;j++)
+                frame[j]==-1 ? printf("-\t") : printf("%d\t",frame[j]);
+            printf("Fault\n");
+        }
+    }
+
+    printf("\nTotal Hit = %d",hit);
+    printf("\nTotal Fault = %d",fault);
+    printf("\nHit Ratio = %.2f", (float)hit/n);
+    printf("\nFault Ratio = %.2f", (float)fault/n);
+
+    return 0;
+}

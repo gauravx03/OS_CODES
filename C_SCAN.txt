@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int n, req[50], head, size, dir;
+    int i, j, temp, cur, total = 0;
+
+    printf("Enter number of requests: ");
+    scanf("%d", &n);
+
+    printf("Enter requests: ");
+    for(i=0; i<n; i++)
+        scanf("%d", &req[i]);
+
+    printf("Enter head: ");
+    scanf("%d", &head);
+
+    printf("Enter disk size: ");
+    scanf("%d", &size);
+
+    printf("Enter direction (1=Right,0=Left): ");
+    scanf("%d", &dir);
+
+    for(i=0; i<n-1; i++)
+        for(j=0; j<n-i-1; j++)
+            if(req[j] > req[j+1])
+            {
+                temp=req[j];
+                req[j]=req[j+1];
+                req[j+1]=temp;
+            }
+
+    cur = head;
+    printf("\nGantt Chart:\n%d", head);
+
+    if(dir==1)
+    {
+        for(i=0;i<n;i++)
+            if(req[i] >= head)
+            {
+                total += abs(cur-req[i]);
+                cur=req[i];
+                printf(" -> %d", cur);
+            }
+
+        total += abs(cur-(size-1));
+        cur=size-1;
+        printf(" -> %d", cur);
+
+        total += cur;
+        cur=0;
+        printf(" -> 0");
+
+        for(i=0;i<n;i++)
+            if(req[i] < head)
+            {
+                total += abs(cur-req[i]);
+                cur=req[i];
+                printf(" -> %d", cur);
+            }
+    }
+    else
+    {
+        for(i=n-1;i>=0;i--)
+            if(req[i] <= head)
+            {
+                total += abs(cur-req[i]);
+                cur=req[i];
+                printf(" -> %d", cur);
+            }
+
+        total += cur;
+        cur=0;
+        printf(" -> 0");
+
+        total += size-1;
+        cur=size-1;
+        printf(" -> %d", cur);
+
+        for(i=n-1;i>=0;i--)
+            if(req[i] > head)
+            {
+                total += abs(cur-req[i]);
+                cur=req[i];
+                printf(" -> %d", cur);
+            }
+    }
+
+    printf("\n\nTotal Seek Length = %d", total);
+
+    return 0;
+}
