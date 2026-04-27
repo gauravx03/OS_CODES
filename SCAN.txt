@@ -1,50 +1,92 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-int main() {
-    int n, head, size, dir, total = 0;
-    int req[50], i, j, temp, start;
+int main()
+{
+    int n, req[50], head, size, dir;
+    int i, j, temp, cur, total = 0;
 
     printf("Enter number of requests: ");
     scanf("%d", &n);
 
-    if(n <= 0) {
-        printf("No requests");
-        return 0;
-    }
+    printf("Enter requests: ");
+    for(i=0; i<n; i++)
+        scanf("%d", &req[i]);
 
-    printf("Enter request sequence: ");
-    for(i=0; i<n; i++) scanf("%d", &req[i]);
-
-    printf("Enter current head: ");
+    printf("Enter head: ");
     scanf("%d", &head);
 
     printf("Enter disk size: ");
     scanf("%d", &size);
 
-    printf("Enter direction (1=right, 0=left): ");
+    printf("Enter direction (1=Right,0=Left): ");
     scanf("%d", &dir);
 
     for(i=0; i<n-1; i++)
         for(j=0; j<n-i-1; j++)
-            if(req[j] > req[j+1]) {
-                temp = req[j];
-                req[j] = req[j+1];
-                req[j+1] = temp;
+            if(req[j] > req[j+1])
+            {
+                temp=req[j];
+                req[j]=req[j+1];
+                req[j+1]=temp;
             }
 
-    start = head;
+    cur = head;
+    printf("\nGantt Chart:\n%d", head);
 
-    printf("\nCurrent\tMovement\n");
-    printf("%d\t0\n", head);
-
-    if(dir == 1) {
-        for(i=0; i<n; i++)
-            if(req[i] >= start) {
-                printf("%d\t%d\n", req[i], abs(head-req[i]));
-                total += abs(head-req[i]);
-                head = req[i];
+    if(dir==1)
+    {
+        for(i=0;i<n;i++)
+            if(req[i] >= head)
+            {
+                total += abs(cur-req[i]);
+                cur=req[i];
+                printf(" -> %d", cur);
             }
 
-        if(head != size-1) {
-            printf("%d
+        if(cur != size-1)
+        {
+            total += abs(cur-(size-1));
+            cur=size-1;
+            printf(" -> %d", cur);
+        }
+
+        for(i=n-1;i>=0;i--)
+            if(req[i] < head)
+            {
+                total += abs(cur-req[i]);
+                cur=req[i];
+                printf(" -> %d", cur);
+            }
+    }
+    else
+    {
+        for(i=n-1;i>=0;i--)
+            if(req[i] <= head)
+            {
+                total += abs(cur-req[i]);
+                cur=req[i];
+                printf(" -> %d", cur);
+            }
+
+        if(cur != 0)
+        {
+            total += cur;
+            cur=0;
+            printf(" -> 0");
+        }
+
+        for(i=0;i<n;i++)
+            if(req[i] > head)
+            {
+                total += abs(cur-req[i]);
+                cur=req[i];
+                printf(" -> %d", cur);
+            }
+    }
+
+    printf("\n\nTotal Seek Length = %d", total);
+
+    return 0;
+}
+which code it is
